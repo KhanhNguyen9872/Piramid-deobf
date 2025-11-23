@@ -16,7 +16,7 @@ function deobfuscate() {
 	sed -i "s/;/\n/g" $f
 	code=$(grep -a 'eval "$(eval $_command_dump -d <<<' $f | sed 's/eval "$(eval $_command_dump -d <<< "//g' | sed 's/")"//g' | base64 -d)
 	for i in 1 2; do
-		echo "$code" | sed "s/eval/${string}/g" > tmp0.sh
+		echo "$code" | sed "s/eval/echo/g" > tmp0.sh
 		code="$(bash tmp0.sh)"
 	done
 	echo "$code" | sed "s/;/\n/g" | grep 'base64 -d <<< $(rev <<<' | sed 's/base64 -d <<< $(rev <<< "//g' | sed 's/") >&7//g' | rev | base64 -d | sed "s/eval \"\$(cat <\&8)\";/${string} \"\$(cat <\&8)\";/" > tmp0.sh
